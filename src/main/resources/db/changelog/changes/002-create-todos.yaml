@@ -1,0 +1,90 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-todos
+      author: codex
+      changes:
+        - createTable:
+            tableName: todos
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_todos
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(2000)
+              - column:
+                  name: completed
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priority
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: due_date
+                  type: TIMESTAMP
+              - column:
+                  name: owner_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: todos
+            baseColumnNames: owner_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_todos_owner
+            onDelete: CASCADE
+        - createIndex:
+            tableName: todos
+            indexName: idx_todos_owner_id
+            columns:
+              - column:
+                  name: owner_id
+        - createIndex:
+            tableName: todos
+            indexName: idx_todos_owner_completed
+            columns:
+              - column:
+                  name: owner_id
+              - column:
+                  name: completed
+        - createIndex:
+            tableName: todos
+            indexName: idx_todos_owner_priority
+            columns:
+              - column:
+                  name: owner_id
+              - column:
+                  name: priority
+        - createIndex:
+            tableName: todos
+            indexName: idx_todos_owner_due_date
+            columns:
+              - column:
+                  name: owner_id
+              - column:
+                  name: due_date
